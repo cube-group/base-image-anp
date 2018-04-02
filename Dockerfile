@@ -26,7 +26,6 @@ RUN set -xe \
     && rm -rf /usr/src/php/ext/memcached \
     && apk del .memcached-deps
 
-# pecl install yaf-3.0.6 redis-3.1.6 memcached-3.0.4
 RUN cd /tmp && pecl download yaf-3.0.6 && \
     mkdir -p /tmp/yaf-3.0.6 && \
     tar -xf yaf-3.0.6.tgz -C /tmp/yaf-3.0.6 --strip-components=1 && \
@@ -57,6 +56,10 @@ RUN cd /tmp && pecl download apcu-5.1.11 && \
     tar -xf apcu-5.1.11.tgz -C /tmp/apcu-5.1.11 --strip-components=1 && \
     docker-php-ext-configure /tmp/apcu-5.1.11 && \
     docker-php-ext-install /tmp/apcu-5.1.11 && \
+    sed -i '$a\[apcu]' /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
+    sed -i '$a\apc.enabled=1' /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
+    sed -i '$a\apc.shm_size=32M' /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
+    sed -i '$a\apc.enable_cli=1' /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     rm -rf /tmp/apcu-*
 
 #RUN cd /tmp \
