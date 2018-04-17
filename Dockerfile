@@ -23,7 +23,7 @@ ENV FPM_SLOWLOG_TIMEOUT 2
 
 # dingding webhook
 ENV APP_NAME test
-ENV APP_ALERT_DINGDING
+ENV APP_ALERT_DINGDING false
 
 # copy
 COPY ./scripts/start.sh /extra-sh
