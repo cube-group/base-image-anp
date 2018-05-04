@@ -1,3 +1,5 @@
+#!/usr/bin/env php
+
 <?php
 
 /**
@@ -16,7 +18,7 @@ class Monitor
         if (!$appName = getenv('APP_NAME')) {
             exit;
         }
-        if (!$dingding = getenv('APP_ALERT_DINGDING')) {
+        if (!$dingding = getenv('APP_MONITOR_HOOK')) {
             exit;
         }
         $this->dingding = $dingding;
@@ -34,7 +36,7 @@ class Monitor
             }
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
             if ($fpmNum >= 45) {
-                $this->sendPost("php-fpm 进程即将消耗完毕目前数量: {$fpmNum}");
+                $this->sendPost("php-fpm children will be not enough: {$fpmNum}");
             }
             sleep(15);
         }
@@ -51,8 +53,7 @@ class Monitor
 
     /**
      * 发送请求
-     * @param $url
-     * @param $content
+     * @param $content string
      * @return mixed
      */
     private function sendPost($content)
@@ -68,7 +69,7 @@ class Monitor
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             'msgtype' => 'text',
-            'text' => ['content' => $content],
+            'text' => ['content' => "app: {$this->appName}\n ip: {$this->serverIp()}\n content:{$content}"],
             'at' => ['isAtAll' => true]
         ]));
         return curl_exec($ch);
