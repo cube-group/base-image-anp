@@ -18,6 +18,7 @@ ENV FPM_MAX_CHILDREN 50
 ENV FPM_START_SERVERS 8
 ENV FPM_MIN_SPARE_SERVERS 4
 ENV FPM_MAX_SPARE_SERVERS 5
+ENV FPM_SLOWLOG /usr/local/var/log/slow.log
 ENV FPM_SLOWLOG_TIMEOUT 2
 
 ENV NGINX_BODY_SIZE 100m
@@ -264,7 +265,8 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
         -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = ${FPM_MIN_SPARE_SERVERS}/g" \
         -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = ${FPM_MAX_SPARE_SERVERS}/g" \
         -e "s/;pm.max_requests = 500/pm.max_requests = 200/g" \
-        -e "s/;slowlog = log/$pool.log.slow/slowlog = /var/log/slow.log/g" \
+        -e "s/;slowlog = log/$pool.log.slow/slowlog = ${FPM_SLOWLOG}/g" \
+        -e "s/;request_slowlog_timeout = 0/request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}/g" \
         -e "s/user = www-data/user = nginx/g" \
         -e "s/group = www-data/group = nginx/g" \
         -e "s/;listen.mode = 0660/listen.mode = 0666/g" \

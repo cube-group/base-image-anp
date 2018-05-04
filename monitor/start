@@ -10,6 +10,7 @@
  */
 class Monitor
 {
+    private $slowlog = '';
     private $dingding = '';
     private $appName = '';
 
@@ -19,6 +20,9 @@ class Monitor
             exit;
         }
         if (!$dingding = getenv('APP_MONITOR_HOOK')) {
+            exit;
+        }
+        if (!$appName = getenv('APP_NAME')) {
             exit;
         }
         $this->dingding = $dingding;
