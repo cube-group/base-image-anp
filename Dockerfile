@@ -119,6 +119,9 @@ RUN pecl install redis && \
 #nginx install
 ENV NGINX_VERSION 1.13.12
 
+# 恢复标准源
+RUN echo /etc/apk/repositories.bak > /etc/apk/repositories && \
+    apk update
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
 		--prefix=/etc/nginx \
@@ -251,8 +254,6 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
 RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}"  >> ${php_vars} &&\
@@ -290,7 +291,7 @@ RUN apk del \
 
 ADD conf/supervisord.conf /etc/supervisord.conf
 ADD conf/nginx.conf /etc/nginx/nginx.conf
-ADD conf/default.conf /etc/nginx/sites-available/default.conf
+ADD conf/default.conf /etc/nginx/conf.d/default.conf
 ADD scripts/ /extra
 ADD monitor/ /extra/monitor
 ADD errors/ /var/www/errors
