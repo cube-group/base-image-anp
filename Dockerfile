@@ -275,9 +275,8 @@ RUN sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fp
     sed -i "s/;listen.owner = www-data/listen.owner = nginx/g" ${fpm_conf} && \
     sed -i "s/;listen.group = www-data/listen.group = nginx/g" ${fpm_conf} && \
     sed -i "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g" ${fpm_conf} && \
+    touch ${FPM_SLOWLOG} && \
     echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
-
-RUN
 
 # remove useless
 RUN apk del \
