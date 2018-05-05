@@ -261,23 +261,21 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "post_max_size = ${PHP_POST_MAX_SIZE}"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
     echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars} && \
-    sed -i \
-        -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
-        -e "s/pm.max_children = 5/pm.max_children = ${FPM_MAX_CHILDREN}/g" \
-        -e "s/pm.start_servers = 2/pm.start_servers = ${FPM_START_SERVERS}/g" \
-        -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = ${FPM_MIN_SPARE_SERVERS}/g" \
-        -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = ${FPM_MAX_SPARE_SERVERS}/g" \
-        -e "s/;pm.max_requests = 500/pm.max_requests = 200/g" \
-        -e "s/;slowlog = log/$pool.log.slow/slowlog = ${FPM_SLOWLOG}/g" \
-        -e "s/;request_slowlog_timeout = 0/request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}/g" \
-        -e "s/user = www-data/user = nginx/g" \
-        -e "s/group = www-data/group = nginx/g" \
-        -e "s/;listen.mode = 0660/listen.mode = 0666/g" \
-        -e "s/;listen.owner = www-data/listen.owner = nginx/g" \
-        -e "s/;listen.group = www-data/listen.group = nginx/g" \
-        -e "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g" \
-        -e "s/^;clear_env = no$/clear_env = no/" \
-        ${fpm_conf}
+    sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fpm_conf} && \
+    sed -i "s/pm.max_children = 5/pm.max_children = ${FPM_MAX_CHILDREN}/g" ${fpm_conf} && \
+    sed -i "s/pm.start_servers = 2/pm.start_servers = ${FPM_START_SERVERS}/g" ${fpm_conf} && \
+    sed -i "s/pm.min_spare_servers = 1/pm.min_spare_servers = ${FPM_MIN_SPARE_SERVERS}/g"  ${fpm_conf} && \
+    sed -i "s/pm.max_spare_servers = 3/pm.max_spare_servers = ${FPM_MAX_SPARE_SERVERS}/g"  ${fpm_conf} && \
+    sed -i "s/;pm.max_requests = 500/pm.max_requests = 200/g"  ${fpm_conf} && \
+    sed -i "s/;slowlog = log/$pool.log.slow/slowlog = ${FPM_SLOWLOG}/g"  ${fpm_conf} && \
+    sed -i "s/;request_slowlog_timeout = 0/request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}/g"  ${fpm_conf} && \
+    sed -i "s/user = www-data/user = nginx/g"  ${fpm_conf} && \
+    sed -i "s/group = www-data/group = nginx/g"  ${fpm_conf} && \
+    sed -i "s/;listen.mode = 0660/listen.mode = 0666/g"  ${fpm_conf} && \
+    sed -i "s/;listen.owner = www-data/listen.owner = nginx/g"  ${fpm_conf} && \
+    sed -i "s/;listen.group = www-data/listen.group = nginx/g"  ${fpm_conf} && \
+    sed -i "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g"  ${fpm_conf} && \
+    sed -i "s/^;clear_env = no$/clear_env = no/"  ${fpm_conf}
 
 # remove useless
 RUN apk del \
