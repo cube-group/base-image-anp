@@ -15,9 +15,6 @@ ENV PHP_POST_MAX_SIZE 100M
 ENV PHP_UPLOAD_MAX_FILESIZE 100M
 
 ENV FPM_MAX_CHILDREN 50
-ENV FPM_START_SERVERS 8
-ENV FPM_MIN_SPARE_SERVERS 4
-ENV FPM_MAX_SPARE_SERVERS 5
 ENV FPM_SLOWLOG /usr/local/var/log/slow.log
 ENV FPM_SLOWLOG_TIMEOUT 2
 
@@ -264,9 +261,9 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
 
 RUN sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fpm_conf} && \
     sed -i "s/pm.max_children = 5/pm.max_children = ${FPM_MAX_CHILDREN}/g" ${fpm_conf} && \
-    sed -i "s/pm.start_servers = 2/pm.start_servers = ${FPM_START_SERVERS}/g" ${fpm_conf} && \
-    sed -i "s/pm.min_spare_servers = 1/pm.min_spare_servers = ${FPM_MIN_SPARE_SERVERS}/g" ${fpm_conf} && \
-    sed -i "s/pm.max_spare_servers = 3/pm.max_spare_servers = ${FPM_MAX_SPARE_SERVERS}/g" ${fpm_conf} && \
+    sed -i "s/pm.start_servers = 2/pm.start_servers = 5/g" ${fpm_conf} && \
+    sed -i "s/pm.min_spare_servers = 1/pm.min_spare_servers = 4/g" ${fpm_conf} && \
+    sed -i "s/pm.max_spare_servers = 3/pm.max_spare_servers = 6/g" ${fpm_conf} && \
     sed -i "s/;pm.max_requests = 500/pm.max_requests = 200/g" ${fpm_conf} && \
     sed -i "s/;request_slowlog_timeout = 0/request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}/g" ${fpm_conf} && \
     sed -i "s/user = www-data/user = nginx/g" ${fpm_conf} && \
