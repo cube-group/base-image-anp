@@ -12,6 +12,7 @@ Zend Engine v3.1.0, Copyright (c) 1998-2017 Zend Technologies
 # PHP extensions
 ```
 [PHP Modules]
+amqp
 apcu
 Core
 ctype
@@ -25,19 +26,20 @@ ftp
 gd
 hash
 iconv
+igbinary
 intl
 json
 libxml
 mbstring
-mcrypt
 memcached
 mongodb
-mysqli
+msgpack
 mysqlnd
 openssl
 pcre
 PDO
 pdo_mysql
+pdo_pgsql
 pdo_sqlite
 Phar
 posix
@@ -47,6 +49,7 @@ Reflection
 session
 SimpleXML
 soap
+sodium
 SPL
 sqlite3
 standard
