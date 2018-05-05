@@ -260,8 +260,9 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}"  >> ${php_vars} &&\
     echo "post_max_size = ${PHP_POST_MAX_SIZE}"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
-    echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars} && \
-    sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fpm_conf} && \
+    echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars}
+
+RUN sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fpm_conf} && \
     sed -i "s/pm.max_children = 5/pm.max_children = ${FPM_MAX_CHILDREN}/g" ${fpm_conf} && \
     sed -i "s/pm.start_servers = 2/pm.start_servers = ${FPM_START_SERVERS}/g" ${fpm_conf} && \
     sed -i "s/pm.min_spare_servers = 1/pm.min_spare_servers = ${FPM_MIN_SPARE_SERVERS}/g" ${fpm_conf} && \
