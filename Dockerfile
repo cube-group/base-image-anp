@@ -100,6 +100,8 @@ RUN apk add rabbitmq-c-dev \
 
 # extensions install
 RUN pecl install redis && \
+    echo '[redis]' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
+    echo 'extension=redis.so' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
     pecl install xdebug && \
     echo '[xdebug]' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo 'extension=xdebug.so' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
@@ -120,10 +122,7 @@ RUN pecl install redis && \
     echo 'extension=apcu.so' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.enabled=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.shm_size=32M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
-    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
-    pecl install xdebug && \
-    echo '[xdebug]' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo 'extension=xdebug.so' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
 
 RUN addgroup -S nginx \
   && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
