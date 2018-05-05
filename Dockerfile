@@ -120,7 +120,7 @@ RUN pecl install redis && \
 ENV NGINX_VERSION 1.13.12
 
 # 恢复标准源
-RUN echo /etc/apk/repositories.bak > /etc/apk/repositories && \
+RUN rm -rf /etc/apk/repositories && mv /etc/apk/repositories.bak /etc/apk/repositories && \
     apk update
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
