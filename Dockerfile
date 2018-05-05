@@ -175,7 +175,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 
 
 #install php
-RUN apk add --no-cache supervisor \
+RUN apk add --no-cache \
     curl \
     libcurl \
     python \
@@ -235,7 +235,7 @@ RUN pecl install redis && \
     echo 'extension=redis.so' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
     pecl install xdebug && \
     echo '[xdebug]' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo 'extension=xdebug.so' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo 'opcache.validate_timestamps=0' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
     echo 'opcache.enable=1' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
     echo 'opcache.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
@@ -277,6 +277,8 @@ RUN sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fp
     sed -i "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g" ${fpm_conf} && \
     echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
 
+RUN
+
 # remove useless
 RUN apk del \
     dpkg-dev dpkg \
@@ -288,7 +290,6 @@ RUN apk del \
     pkgconf \
     re2c
 
-ADD conf/supervisord.conf /etc/supervisord.conf
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 ADD scripts/ /extra

@@ -110,5 +110,7 @@ else
   fi
 fi
 
-# Start supervisord and services
-exec /usr/bin/supervisord -n -c /etc/supervisord.conf
+
+nohup php /extra/monitor/start &
+/usr/local/sbin/php-fpm &
+/usr/sbin/nginx -g "daemon off; error_log /dev/stderr info;"
