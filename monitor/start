@@ -7,10 +7,13 @@
  * User: linyang
  * Date: 2018/4/17
  * Time: 上午10:43
+ *
+ * Class Monitor
+ * 监控类
+ * 这里我们使用PHP自我实现了。。。:)
  */
 class Monitor
 {
-    private $slowlog = '';
     private $dingding = '';
     private $appName = '';
 
@@ -20,9 +23,6 @@ class Monitor
             exit;
         }
         if (!$dingding = getenv('APP_MONITOR_HOOK')) {
-            exit;
-        }
-        if (!$appName = getenv('APP_NAME')) {
             exit;
         }
         $this->dingding = $dingding;
@@ -38,11 +38,12 @@ class Monitor
                 $this->sendPost($log);
                 system('true > /usr/local/var/log/www.log.slow');
             }
+
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
             if ($fpmNum >= 45) {
                 $this->sendPost("php-fpm children will be not enough: {$fpmNum}");
             }
-            sleep(15);
+            sleep(30);
         }
     }
 

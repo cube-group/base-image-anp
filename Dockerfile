@@ -8,6 +8,8 @@ USER root
 
 ENV APP_NAME anp
 ENV APP_PATH /var/www/html
+ENV APP_PATH_INDEX /var/www/html
+ENV APP_PATH_404 /var/www/html
 #ENV APP_MONITOR_HOOK DINGTALK-HOOK
 
 ENV PHP_MEM_LIMIT 512M
@@ -15,10 +17,8 @@ ENV PHP_POST_MAX_SIZE 100M
 ENV PHP_UPLOAD_MAX_FILESIZE 100M
 
 ENV FPM_MAX_CHILDREN 50
-ENV FPM_SLOWLOG /usr/local/var/log/slow.log
+ENV FPM_SLOWLOG /var/log/fpm-slow.log
 ENV FPM_SLOWLOG_TIMEOUT 2
-
-ENV NGINX_BODY_SIZE 100m
 
 #以下不要覆盖
 ENV php_conf /usr/local/etc/php-fpm.conf
@@ -290,7 +290,6 @@ ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 ADD scripts/ /extra
 ADD monitor/ /extra/monitor
-ADD errors/ /var/www/errors
 
 WORKDIR /var/www/html
 

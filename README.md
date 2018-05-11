@@ -103,19 +103,20 @@ $docker run -d -it -p 8089:80 --name project anp-project
 ```
 $docker run -d -it -p 8089:80 -v /tmp/your-conf:/etc/nginx/sites-enabled/default.conf` --name project anp-project
 ```
+
 # Test
 http://127.0.0.1:8089/index.php
-# 环境变量支持
+
+## 环境变量:PHP参数相关
 * PHP_MEM_LIMIT: php进程内存限制,默认512M
 * PHP_POST_MAX_SIZE: php post最大字节 默认100M
 * PHP_UPLOAD_MAX_FILESIZE: php最大文件上传限制 默认100M
-* WEBROOT: php默认工作目录 默认/var/www/html(尽量不要动)
-* NGINX_BODY_SIZE: nginx post body限制 默认100m
 * FPM_MAX_CHILDREN: php-fpm最大子进程数量
-* FPM_START_SERVERS: php-fpm开始时子进程数量
-* FPM_MIN_SPARE_SERVERS: php-fpm最小空闲进程数量
-* FPM_MAX_SPARE_SERVERS: php-fpm最大空闲进程数量
-* FPM_SLOWLOG: php-fpm 慢日志位置(尽量不用动)
-* FPM_SLOWLOG_TIMEOUT: php-fpm 慢日志超时时间(单位:秒)
+* FPM_SLOWLOG_TIMEOUT: php-fpm慢日志超时时间(单位:秒)
+
+## 特殊环境变量
 * APP_NAME: app名称
-* APP_ALERT_DINGDING: app报警钉钉群机器人webhook
+* APP_PATH: 项目所在目录(默认为:/var/www/html)
+* APP_PATH_INDEX: PHP项目index.php入口文件所在目录(默认为:/var/www/html)
+* APP_PATH_404: PHP项目404.html文件所在目录(默认为:/var/www/html)
+* APP_MONITOR_HOOK: app报警钉钉群机器人webhook
