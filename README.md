@@ -56,6 +56,7 @@ SPL
 sqlite3
 standard
 tokenizer
+xdebug
 xml
 xmlreader
 xmlwriter
@@ -66,6 +67,7 @@ zip
 zlib
 
 [Zend Modules]
+Xdebug
 Zend OPcache
 ```
 # Nginx
