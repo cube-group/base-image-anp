@@ -2,12 +2,12 @@
 
 # Increase the nginx default.conf
 if [ ! -z "$APP_PATH_INDEX" ]; then
- sed -i "s/root /var/www/html;/root /${APP_PATH_INDEX};/g" /etc/nginx/conf.d/default.conf
+ sed -i "s/root /var/www/html;/root ${APP_PATH_INDEX};/g" /etc/nginx/conf.d/default.conf
 fi
 
 # Increase the nginx default.conf
 if [ ! -z "$APP_PATH_404" ]; then
- sed -i "s/root /var/www/errors;/root /${APP_PATH_404};/g" /etc/nginx/conf.d/default.conf
+ sed -i "s/root /var/www/errors;/root ${APP_PATH_404};/g" /etc/nginx/conf.d/default.conf
 fi
 
 # Increase the memory_limit
@@ -26,6 +26,9 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
 fi
 
 # run
+touch /dev/shm/php-fpm.sock
+chmod 777 /dev/shm/php-fpm.sock
+
 nohup php /extra/monitor/start &
 /usr/local/sbin/php-fpm &
 /usr/sbin/nginx -g "daemon off; error_log /dev/stderr info;"
