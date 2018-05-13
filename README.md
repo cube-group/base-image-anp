@@ -6,10 +6,11 @@ nginx-php-fpm base on alpine linux
 alpine the smart linux
 # PHP version
 ```
-PHP 7.1.12 (cli) (built: Dec  1 2017 19:26:10) ( NTS )
-Copyright (c) 1997-2017 The PHP Group
-Zend Engine v3.1.0, Copyright (c) 1998-2017 Zend Technologies
-    with Zend OPcache v7.1.12, Copyright (c) 1999-2017, by Zend Technologies
+PHP 7.2.4 (cli) (built: Apr  5 2018 01:36:21) ( NTS )
+Copyright (c) 1997-2018 The PHP Group
+Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+    with Zend OPcache v7.2.4, Copyright (c) 1999-2018, by Zend Technologies
+    with Xdebug v2.6.0, Copyright (c) 2002-2018, by Derick Rethans
 ```
 # PHP extensions
 ```
