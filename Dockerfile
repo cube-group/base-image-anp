@@ -259,18 +259,18 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
     echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars}
 
-RUN sed -i "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" ${fpm_conf} && \
-    sed -i "s/pm.max_children = 5/pm.max_children = ${FPM_MAX_CHILDREN}/g" ${fpm_conf} && \
-    sed -i "s/pm.start_servers = 2/pm.start_servers = 5/g" ${fpm_conf} && \
-    sed -i "s/pm.min_spare_servers = 1/pm.min_spare_servers = 4/g" ${fpm_conf} && \
-    sed -i "s/pm.max_spare_servers = 3/pm.max_spare_servers = 6/g" ${fpm_conf} && \
-    sed -i "s/;pm.max_requests = 500/pm.max_requests = 200/g" ${fpm_conf} && \
-    sed -i "s/;request_slowlog_timeout = 0/request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}/g" ${fpm_conf} && \
-    sed -i "s/user = www-data/user = nginx/g" ${fpm_conf} && \
-    sed -i "s/group = www-data/group = nginx/g" ${fpm_conf} && \
-    sed -i "s/;listen.mode = 0660/listen.mode = 0666/g" ${fpm_conf} && \
-    sed -i "s/;listen.owner = www-data/listen.owner = nginx/g" ${fpm_conf} && \
-    sed -i "s/;listen.group = www-data/listen.group = nginx/g" ${fpm_conf} && \
+RUN sed -i "s#;catch_workers_output\s*=\s*yes#catch_workers_output = yes#g" ${fpm_conf} && \
+    sed -i "s#pm.max_children = 5#pm.max_children = ${FPM_MAX_CHILDREN}#g" ${fpm_conf} && \
+    sed -i "s#pm.start_servers = 2#pm.start_servers = 5#g" ${fpm_conf} && \
+    sed -i "s#pm.min_spare_servers = 1#pm.min_spare_servers = 4#g" ${fpm_conf} && \
+    sed -i "s#pm.max_spare_servers = 3#pm.max_spare_servers = 6#g" ${fpm_conf} && \
+    sed -i "s#;pm.max_requests = 500#pm.max_requests = 200#g" ${fpm_conf} && \
+    sed -i "s#;request_slowlog_timeout = 0#request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}#g" ${fpm_conf} && \
+    sed -i "s#user = www-data#user = nginx#g" ${fpm_conf} && \
+    sed -i "s#group = www-data#group = nginx#g" ${fpm_conf} && \
+    sed -i "s#;listen.mode = 0660#listen.mode = 0666#g" ${fpm_conf} && \
+    sed -i "s#;listen.owner = www-data#listen.owner = nginx#g" ${fpm_conf} && \
+    sed -i "s#;listen.group = www-data#listen.group = nginx#g" ${fpm_conf} && \
     touch ${FPM_SLOWLOG} && \
     echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
 
