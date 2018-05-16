@@ -290,8 +290,6 @@ ADD conf/default.conf /etc/nginx/conf.d/default.conf
 ADD scripts/ /extra
 ADD monitor/ /extra/monitor
 
-RUN chmod -R 777 $APP_PATH
-
 WORKDIR $APP_PATH
 
 EXPOSE 80
