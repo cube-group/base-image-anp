@@ -11,14 +11,18 @@ ENV APP_PATH /var/www/html
 ENV APP_PATH_INDEX /var/www/html
 ENV APP_PATH_404 /var/www/html
 #ENV APP_MONITOR_HOOK DINGTALK-HOOK
+ENV APP_MONITOR_RATE 30
 
 ENV PHP_MEM_LIMIT 512M
 ENV PHP_POST_MAX_SIZE 100M
 ENV PHP_UPLOAD_MAX_FILESIZE 100M
 
-ENV FPM_MAX_CHILDREN 50
+ENV FPM_MAX_CHILDREN 100
 ENV FPM_SLOWLOG /var/log/fpm-slow.log
 ENV FPM_SLOWLOG_TIMEOUT 2
+
+#nginx默认
+ENV NGINX_PHP_CONF default
 
 #以下不要覆盖
 ENV php_conf /usr/local/etc/php-fpm.conf
@@ -286,6 +290,8 @@ RUN apk del \
     re2c
 
 ADD conf/nginx.conf /etc/nginx/nginx.conf
+ADD conf/orc.conf /etc/nginx/conf.d/orc.conf
+ADD conf/tp.conf /etc/nginx/conf.d/tp.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 ADD scripts/ /extra
 ADD monitor/ /extra/monitor

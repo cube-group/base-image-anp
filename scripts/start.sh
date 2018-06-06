@@ -25,6 +25,18 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
  sed -i "s#upload_max_filesize = 100M#upload_max_filesize= ${PHP_UPLOAD_MAX_FILESIZE}M#g" /usr/local/etc/php/conf.d/docker-vars.ini
 fi
 
+#nginx
+if [ "$NGINX_CONF" == "tp" ];then
+    rm -rf /etc/nginx/conf.d/default.conf
+    rm -rf /etc/nginx/conf.d/orc.conf
+elif [ "$NGINX_CONF" == "orc" ];then
+    rm -rf /etc/nginx/conf.d/default.conf
+    rm -rf /etc/nginx/conf.d/tp.conf
+else
+    rm -rf /etc/nginx/conf.d/orc.conf
+    rm -rf /etc/nginx/conf.d/tp.conf
+fi
+
 # run
 touch /dev/shm/php-fpm.sock
 chmod 777 /dev/shm/php-fpm.sock

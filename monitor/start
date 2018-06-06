@@ -16,6 +16,8 @@ class Monitor
 {
     private $dingding = '';
     private $appName = '';
+    private $slowlog = '';
+    private $rate = 30;
 
     public function __construct()
     {
@@ -25,25 +27,31 @@ class Monitor
         if (!$dingding = getenv('APP_MONITOR_HOOK')) {
             exit;
         }
+        if (!$slowlog = getenv('FPM_SLOWLOG')) {
+            exit;
+        }
+        if($rate = (int)getenv('APP_MONITOR_RATE')){
+            $this->rate = $rate;
+        }
         $this->dingding = $dingding;
         $this->appName = $appName;
+        $this->slowlog = $slowlog;
         $this->init();
     }
 
     private function init()
     {
         while (true) {
-            $log = system('cat /usr/local/var/log/www.log.slow');
-            if ($log) {
+            if ($log = system("cat {$this->slowlog}")) {
                 $this->sendPost($log);
-                system('true > /usr/local/var/log/www.log.slow');
+                system("true > {$this->slowlog}");
             }
 
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
-            if ($fpmNum >= 45) {
+            if ($fpmNum >= 90) {
                 $this->sendPost("php-fpm children will be not enough: {$fpmNum}");
             }
-            sleep(30);
+            sleep($this->rate);
         }
     }
 
