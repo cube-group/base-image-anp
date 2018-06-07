@@ -37,9 +37,14 @@ else
     rm -rf /etc/nginx/conf.d/tp.conf
 fi
 
+chown -R nginx:nginx $APP_PATH
+chmod -R 777 $APP_PATH
+mkdir -p /data/log
+chown -R nginx:nginx /data/log
+chmod -R 777 /data/log
 # run
-touch /dev/shm/php-fpm.sock
-chmod 777 /dev/shm/php-fpm.sock
+#touch /dev/shm/php-fpm.sock
+#chmod 777 /dev/shm/php-fpm.sock
 
 nohup php /extra/monitor/start &
 /usr/local/sbin/php-fpm &

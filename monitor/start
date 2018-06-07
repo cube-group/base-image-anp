@@ -17,6 +17,7 @@ class Monitor
     private $dingding = '';
     private $appName = '';
     private $slowlog = '';
+    private $slowlogTimeout = 2;
     private $rate = 30;
 
     public function __construct()
@@ -30,7 +31,10 @@ class Monitor
         if (!$slowlog = getenv('FPM_SLOWLOG')) {
             exit;
         }
-        if($rate = (int)getenv('APP_MONITOR_RATE')){
+        if ($slowlogTimeout = (int)getenv('FPM_SLOWLOG_TIMEOUT')) {
+            $this->slowlogTimeout = $slowlogTimeout;
+        }
+        if ($rate = (int)getenv('APP_MONITOR_RATE')) {
             $this->rate = $rate;
         }
         $this->dingding = $dingding;
@@ -82,7 +86,7 @@ class Monitor
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             'msgtype' => 'text',
-            'text' => ['content' => "app: {$this->appName}\n ip: {$this->serverIp()}\n content:{$content}"],
+            'text' => ['content' => "php慢日志({$this->slowlogTimeout}s)上报:\napp: {$this->appName}\nip: {$this->serverIp()}\content:{$content}"],
             'at' => ['isAtAll' => true]
         ]));
         return curl_exec($ch);
