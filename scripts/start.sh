@@ -26,10 +26,10 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
 fi
 
 #nginx
-if [ "$NGINX_CONF" == "tp" ];then
+if [ "$NGINX_PHP_CONF" == "tp" ];then
     rm -rf /etc/nginx/conf.d/default.conf
     rm -rf /etc/nginx/conf.d/orc.conf
-elif [ "$NGINX_CONF" == "orc" ];then
+elif [ "$NGINX_PHP_CONF" == "orc" ];then
     rm -rf /etc/nginx/conf.d/default.conf
     rm -rf /etc/nginx/conf.d/tp.conf
 else
