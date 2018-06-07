@@ -112,6 +112,9 @@ $docker run -d -it -p 8089:80 -v /tmp/your-conf:/etc/nginx/sites-enabled/default
 # Test
 http://127.0.0.1:8089/index.php
 
+## 环境变量:NGINX参数
+*
+
 ## 环境变量:PHP参数相关
 * PHP_MEM_LIMIT: php进程内存限制,默认512M
 * PHP_POST_MAX_SIZE: php post最大字节 默认100M
@@ -125,3 +128,4 @@ http://127.0.0.1:8089/index.php
 * APP_PATH_INDEX: PHP项目index.php入口文件所在目录(默认为:/var/www/html)
 * APP_PATH_404: PHP项目404.html文件所在目录(默认为:/var/www/html)
 * APP_MONITOR_HOOK: app报警钉钉群机器人webhook
+* APP_MONITOR_RATE: 监控频率(单位:秒)
