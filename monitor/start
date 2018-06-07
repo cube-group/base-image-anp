@@ -16,6 +16,8 @@ class Monitor
 {
     private $dingding = '';
     private $appName = '';
+
+    private $maxChildren = 100;
     private $slowlog = '';
     private $slowlogTimeout = 2;
     private $rate = 30;
@@ -30,6 +32,10 @@ class Monitor
         }
         if (!$slowlog = getenv('FPM_SLOWLOG')) {
             exit;
+        }
+
+        if ($maxChildren = (int)getenv('FPM_MAX_CHILDREN')) {
+            $this->maxChildren = $maxChildren;
         }
         if ($slowlogTimeout = (int)getenv('FPM_SLOWLOG_TIMEOUT')) {
             $this->slowlogTimeout = $slowlogTimeout;
@@ -52,7 +58,7 @@ class Monitor
             }
 
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
-            if ($fpmNum >= 90) {
+            if ($fpmNum >= (int)($this->maxChildren * 0.9)) {
                 $this->sendPost("php-fpm children will be not enough: {$fpmNum}");
             }
             sleep($this->rate);
@@ -60,12 +66,12 @@ class Monitor
     }
 
     /**
-     * 获取本地外网IP
+     * 获取外网IP-内网IP
      * @return mixed
      */
     private function serverIp()
     {
-        return $_SERVER['SERVER_ADDR'];
+        return $_SERVER['REMOTE_ADDR'] . '-' . gethostbyname(exec('hostname'));
     }
 
     /**
@@ -86,7 +92,7 @@ class Monitor
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             'msgtype' => 'text',
-            'text' => ['content' => "php慢日志({$this->slowlogTimeout}s)上报:\napp: {$this->appName}\nip: {$this->serverIp()}\content:{$content}"],
+            'text' => ['content' => "php慢日志({$this->slowlogTimeout}s)上报:\napp: {$this->appName}\nip: {$this->serverIp()}\ncontent:{$content}"],
             'at' => ['isAtAll' => true]
         ]));
         return curl_exec($ch);
