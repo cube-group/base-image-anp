@@ -52,7 +52,7 @@ class Monitor
     private function init()
     {
         while (true) {
-            if ($log = system("cat {$this->slowlog} && true > {$this->slowlog}")) {
+            if ($log = system("cat {$this->slowlog} && : > {$this->slowlog}")) {
                 $this->sendPost($log);
             }
 
