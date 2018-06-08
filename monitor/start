@@ -52,9 +52,8 @@ class Monitor
     private function init()
     {
         while (true) {
-            if ($log = system("cat {$this->slowlog}")) {
+            if ($log = system("cat {$this->slowlog} && true > {$this->slowlog}")) {
                 $this->sendPost($log);
-                system("true > {$this->slowlog}");
             }
 
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
