@@ -44,11 +44,12 @@ mkdir -p /data/log
 chown -R nginx:nginx /data/log
 chmod -R 777 /data/log
 
+#create cli.log
+touch /cli.log
+
 #extra third shell start
 sh /extra/external.sh
 
-#监控监本启动
-nohup php /extra/monitor/start &
 #php-fpm start
 /usr/local/sbin/php-fpm &
 #nginx start
