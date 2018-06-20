@@ -17,6 +17,11 @@ class Monitor
     private $dingding = '';
     private $appName = '';
 
+    private $maxChildren = 100;
+    private $slowlog = '';
+    private $slowlogTimeout = 2;
+    private $rate = 30;
+
     public function __construct()
     {
         if (!$appName = getenv('APP_NAME')) {
@@ -25,35 +30,47 @@ class Monitor
         if (!$dingding = getenv('APP_MONITOR_HOOK')) {
             exit;
         }
+        if (!$slowlog = getenv('FPM_SLOWLOG')) {
+            exit;
+        }
+
+        if ($maxChildren = (int)getenv('FPM_MAX_CHILDREN')) {
+            $this->maxChildren = $maxChildren;
+        }
+        if ($slowlogTimeout = (int)getenv('FPM_SLOWLOG_TIMEOUT')) {
+            $this->slowlogTimeout = $slowlogTimeout;
+        }
+        if ($rate = (int)getenv('APP_MONITOR_RATE')) {
+            $this->rate = $rate;
+        }
         $this->dingding = $dingding;
         $this->appName = $appName;
+        $this->slowlog = $slowlog;
         $this->init();
     }
 
     private function init()
     {
         while (true) {
-            $log = system('cat /usr/local/var/log/www.log.slow');
-            if ($log) {
+            if ($log = system("cat {$this->slowlog} && : > {$this->slowlog}")) {
                 $this->sendPost($log);
-                system('true > /usr/local/var/log/www.log.slow');
             }
 
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
-            if ($fpmNum >= 45) {
+            if ($fpmNum >= (int)($this->maxChildren * 0.9)) {
                 $this->sendPost("php-fpm children will be not enough: {$fpmNum}");
             }
-            sleep(30);
+            sleep($this->rate);
         }
     }
 
     /**
-     * 获取本地外网IP
+     * 获取外网IP-内网IP
      * @return mixed
      */
     private function serverIp()
     {
-        return $_SERVER['SERVER_ADDR'];
+        return $_SERVER['REMOTE_ADDR'] . '-' . gethostbyname(exec('hostname'));
     }
 
     /**
@@ -74,7 +91,7 @@ class Monitor
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             'msgtype' => 'text',
-            'text' => ['content' => "app: {$this->appName}\n ip: {$this->serverIp()}\n content:{$content}"],
+            'text' => ['content' => "php慢日志({$this->slowlogTimeout}s)上报:\napp: {$this->appName}\nip: {$this->serverIp()}\ncontent:{$content}"],
             'at' => ['isAtAll' => true]
         ]));
         return curl_exec($ch);
