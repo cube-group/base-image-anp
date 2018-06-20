@@ -276,7 +276,8 @@ RUN sed -i "s#;catch_workers_output\s*=\s*yes#catch_workers_output = yes#g" ${fp
     sed -i "s#;listen.owner = www-data#listen.owner = nginx#g" ${fpm_conf} && \
     sed -i "s#;listen.group = www-data#listen.group = nginx#g" ${fpm_conf} && \
     touch ${FPM_SLOWLOG} && \
-    echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
+    echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf} && \
+    echo "clear_env = no" >> ${fpm_conf}
 
 # remove useless
 RUN apk del \
