@@ -173,10 +173,9 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	# forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
-
-
-#install php
-RUN apk add --no-cache \
+	&& \
+	# install php
+    apk add --no-cache \
     curl \
     libcurl \
     python \
@@ -205,33 +204,19 @@ RUN apk add --no-cache \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install iconv pdo_mysql pdo_pgsql gd exif intl xsl soap zip opcache && \
-    docker-php-source delete
-
-# extension memcached install
-#RUN set -xe \
-#    && apk add --no-cache libmemcached-libs zlib \
-#    && apk add git \
-#    && apk add --no-cache --virtual .memcached-deps zlib-dev libmemcached-dev cyrus-sasl-dev git \
-#    && git clone -b php7 https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached \
-#    && docker-php-ext-configure /usr/src/php/ext/memcached --disable-memcached-sasl \
-#    && docker-php-ext-install /usr/src/php/ext/memcached \
-#    && rm -rf /usr/src/php/ext/memcached \
-#    && apk del .memcached-deps
-RUN apk add libmemcached-libs libmemcached-dev zlib-dev \
+    docker-php-source delete \
+    && apk add libmemcached-libs libmemcached-dev zlib-dev \
     && pecl install igbinary \
     && echo 'extension=igbinary.so' >> /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini \
     && pecl install msgpack \
     && echo 'extension=msgpack.so' >> /usr/local/etc/php/conf.d/docker-php-ext-msgpack.ini \
     && pecl install memcached \
-    && echo 'extension=memcached.so' >> /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
-
-RUN apk add rabbitmq-c-dev \
+    && echo 'extension=memcached.so' >> /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini \
+    && apk add rabbitmq-c-dev \
     && pecl install amqp \
-    && echo 'extension=amqp.so' >> /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
-
-
-# extensions install
-RUN pecl install redis && \
+    && echo 'extension=amqp.so' >> /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini \
+    # pecl extension install
+    && pecl install redis && \
     echo '[redis]' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
     echo 'extension=redis.so' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
     pecl install xdebug && \
@@ -254,16 +239,13 @@ RUN pecl install redis && \
     echo 'extension=apcu.so' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.enabled=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.shm_size=32M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
-    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
-
-
-RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
+    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
+    echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}"  >> ${php_vars} &&\
     echo "post_max_size = ${PHP_POST_MAX_SIZE}"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
-    echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars}
-
-RUN sed -i "s#;catch_workers_output\s*=\s*yes#catch_workers_output = yes#g" ${fpm_conf} && \
+    echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars} && \
+    sed -i "s#;catch_workers_output\s*=\s*yes#catch_workers_output = yes#g" ${fpm_conf} && \
     sed -i "s#pm.max_children = 5#pm.max_children = ${FPM_MAX_CHILDREN}#g" ${fpm_conf} && \
     sed -i "s#pm.start_servers = 2#pm.start_servers = 5#g" ${fpm_conf} && \
     sed -i "s#pm.min_spare_servers = 1#pm.min_spare_servers = 4#g" ${fpm_conf} && \
@@ -277,24 +259,14 @@ RUN sed -i "s#;catch_workers_output\s*=\s*yes#catch_workers_output = yes#g" ${fp
     sed -i "s#;listen.group = www-data#listen.group = nginx#g" ${fpm_conf} && \
     touch ${FPM_SLOWLOG} && \
     echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf} && \
-    echo "clear_env = no" >> ${fpm_conf}
-
-# remove useless
-RUN apk del \
-    dpkg-dev dpkg \
-    file \
-    g++ \
-    gcc \
-    libc-dev \
-    make \
-    pkgconf \
-    re2c
+    echo "clear_env = no" >> ${fpm_conf} && \
+    # remove useless
+    apk del dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
 
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/orc.conf /etc/nginx/conf.d/orc.conf
 ADD conf/tp.conf /etc/nginx/conf.d/tp.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
-
 
 ADD scripts/ /extra
 ADD monitor/ /extra/monitor
