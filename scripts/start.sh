@@ -29,10 +29,17 @@ fi
 if [ "$NGINX_PHP_CONF" == "tp" ];then
     rm -rf /etc/nginx/conf.d/default.conf
     rm -rf /etc/nginx/conf.d/orc.conf
+    rm -rf /etc/nginx/conf.d/laravel.conf
 elif [ "$NGINX_PHP_CONF" == "orc" ];then
     rm -rf /etc/nginx/conf.d/default.conf
     rm -rf /etc/nginx/conf.d/tp.conf
+    rm -rf /etc/nginx/conf.d/laravel.conf
+elif [ "$NGINX_PHP_CONF" == "laravel" ];then
+    rm -rf /etc/nginx/conf.d/default.conf
+    rm -rf /etc/nginx/conf.d/tp.conf
+    rm -rf /etc/nginx/conf.d/orc.conf
 else
+    rm -rf /etc/nginx/conf.d/laravel.conf
     rm -rf /etc/nginx/conf.d/orc.conf
     rm -rf /etc/nginx/conf.d/tp.conf
 fi
