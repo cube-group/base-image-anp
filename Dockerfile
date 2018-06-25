@@ -273,10 +273,11 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     pkgconf \
     re2c
 
-ADD conf/nginx.conf /etc/nginx/nginx.conf
-ADD conf/orc.conf /etc/nginx/conf.d/orc.conf
-ADD conf/tp.conf /etc/nginx/conf.d/tp.conf
-ADD conf/laravel.conf /etc/nginx/conf.d/laravel.conf
+ADD conf/nginx.conf /nginx-php-conf/nginx.conf
+ADD conf/orc.conf /nginx-php-conf/orc.conf
+ADD conf/tp.conf /nginx-php-conf/tp.conf
+ADD conf/laravel.conf /nginx-php-conf/laravel.conf
+
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 
 ADD scripts/ /extra
