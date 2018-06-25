@@ -27,21 +27,21 @@ fi
 
 #nginx
 if [ "$NGINX_PHP_CONF" == "tp" ];then
-    rm -rf /etc/nginx/conf.d/default.conf
-    rm -rf /etc/nginx/conf.d/orc.conf
-    rm -rf /etc/nginx/conf.d/laravel.conf
+    mv /etc/nginx/conf.d/tp.conf /etc/nginx/conf.d/tp.bak
+    rm -rf /etc/nginx/conf.d/*.conf
+    mv /etc/nginx/conf.d/tp.bak /etc/nginx/conf.d/default.conf
 elif [ "$NGINX_PHP_CONF" == "orc" ];then
-    rm -rf /etc/nginx/conf.d/default.conf
-    rm -rf /etc/nginx/conf.d/tp.conf
-    rm -rf /etc/nginx/conf.d/laravel.conf
+    mv /etc/nginx/conf.d/orc.conf /etc/nginx/conf.d/orc.bak
+    rm -rf /etc/nginx/conf.d/*.conf
+    mv /etc/nginx/conf.d/orc.bak /etc/nginx/conf.d/default.conf
 elif [ "$NGINX_PHP_CONF" == "laravel" ];then
-    rm -rf /etc/nginx/conf.d/default.conf
-    rm -rf /etc/nginx/conf.d/tp.conf
-    rm -rf /etc/nginx/conf.d/orc.conf
+    mv /etc/nginx/conf.d/laravel.conf /etc/nginx/conf.d/laravel.bak
+    rm -rf /etc/nginx/conf.d/*.conf
+    mv /etc/nginx/conf.d/laravel.bak /etc/nginx/conf.d/default.conf
 else
-    rm -rf /etc/nginx/conf.d/laravel.conf
-    rm -rf /etc/nginx/conf.d/orc.conf
-    rm -rf /etc/nginx/conf.d/tp.conf
+    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.bak
+    rm -rf /etc/nginx/conf.d/*.conf
+    mv /etc/nginx/conf.d/default.bak /etc/nginx/conf.d/default.conf
 fi
 
 #日志权限处理
