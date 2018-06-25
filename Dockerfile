@@ -276,6 +276,7 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/orc.conf /etc/nginx/conf.d/orc.conf
 ADD conf/tp.conf /etc/nginx/conf.d/tp.conf
+ADD conf/laravel.conf /etc/nginx/conf.d/laravel.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 
 ADD scripts/ /extra
