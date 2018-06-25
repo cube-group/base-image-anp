@@ -29,15 +29,14 @@ ENV php_conf /usr/local/etc/php-fpm.conf
 ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
 ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
 
+ENV NGINX_VERSION 1.13.12
 # 备份原始文件
 # 修改为国内镜像源
 RUN cp /etc/apk/repositories /etc/apk/repositories.bak && \
     echo "http://mirrors.aliyun.com/alpine/v3.7/main/" > /etc/apk/repositories && \
-    apk update
-
-#install nginx
-ENV NGINX_VERSION 1.13.12
-RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
+    apk update && \
+    #install nginx
+    GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
@@ -173,9 +172,10 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	# forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
-	&& \
-	# install php
-    apk add --no-cache \
+
+
+#install php
+RUN apk add --no-cache \
     curl \
     libcurl \
     python \
@@ -204,8 +204,8 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install iconv pdo_mysql pdo_pgsql gd exif intl xsl soap zip opcache && \
-    docker-php-source delete \
-    && apk add libmemcached-libs libmemcached-dev zlib-dev \
+    docker-php-source delete && \
+    apk add libmemcached-libs libmemcached-dev zlib-dev \
     && pecl install igbinary \
     && echo 'extension=igbinary.so' >> /usr/local/etc/php/conf.d/docker-php-ext-igbinary.ini \
     && pecl install msgpack \
@@ -214,9 +214,9 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && echo 'extension=memcached.so' >> /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini \
     && apk add rabbitmq-c-dev \
     && pecl install amqp \
-    && echo 'extension=amqp.so' >> /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini \
-    # pecl extension install
-    && pecl install redis && \
+    && echo 'extension=amqp.so' >> /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini && \
+    # extensions install
+    pecl install redis && \
     echo '[redis]' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
     echo 'extension=redis.so' >> /usr/local/etc/php/conf.d/docker-php-ext-redis.ini && \
     pecl install xdebug && \
@@ -239,8 +239,10 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     echo 'extension=apcu.so' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.enabled=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.shm_size=32M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
-    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
-    echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
+    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
+
+
+RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}"  >> ${php_vars} &&\
     echo "post_max_size = ${PHP_POST_MAX_SIZE}"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
@@ -261,7 +263,15 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf} && \
     echo "clear_env = no" >> ${fpm_conf} && \
     # remove useless
-    apk del dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
+    apk del \
+    dpkg-dev dpkg \
+    file \
+    g++ \
+    gcc \
+    libc-dev \
+    make \
+    pkgconf \
+    re2c
 
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/orc.conf /etc/nginx/conf.d/orc.conf
