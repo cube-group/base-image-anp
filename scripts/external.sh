@@ -1,3 +1,5 @@
 #!/bin/bash
 
-echo "external.sh"
+#监控启动
+php /extra/monitor/start >> /cli.log &
+

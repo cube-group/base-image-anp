@@ -113,7 +113,7 @@ $docker run -d -it -p 8089:80 -v /tmp/your-conf:/etc/nginx/sites-enabled/default
 http://127.0.0.1:8089/index.php
 
 ## 环境变量:NGINX参数
-* NGINX_PHP_CONF: tp为thinkphp fastcgi配置、orc为orc fastcgi配置、模式为yaf配置
+* NGINX_PHP_CONF: tp为thinkphp fastcgi配置、orc为orc fastcgi配置、laravel为laravel fastcgi配置,默认为yaf配置
 
 ## 环境变量:PHP参数相关
 * PHP_MEM_LIMIT: php进程内存限制,默认512M

@@ -1,5 +1,17 @@
 #!/bin/bash
 
+#nginx php conf select
+if [ "$NGINX_PHP_CONF" == "tp" ];then
+    cat /nginx-php-conf/tp.conf > /etc/nginx/conf.d/default.conf
+elif [ "$NGINX_PHP_CONF" == "orc" ];then
+    cat /nginx-php-conf/orc.conf > /etc/nginx/conf.d/default.conf
+elif [ "$NGINX_PHP_CONF" == "laravel" ];then
+    cat /nginx-php-conf/laravel.conf > /etc/nginx/conf.d/default.conf
+else
+    echo "yaf"
+fi
+
+
 # Increase the nginx default.conf
 if [ ! -z "$APP_PATH_INDEX" ]; then
  sed -i "s#root /var/www/html;#root ${APP_PATH_INDEX};#g" /etc/nginx/conf.d/default.conf
@@ -25,17 +37,6 @@ if [ ! -z "$PHP_UPLOAD_MAX_FILESIZE" ]; then
  sed -i "s#upload_max_filesize = 100M#upload_max_filesize= ${PHP_UPLOAD_MAX_FILESIZE}M#g" /usr/local/etc/php/conf.d/docker-vars.ini
 fi
 
-#nginx
-if [ "$NGINX_PHP_CONF" == "tp" ];then
-    rm -rf /etc/nginx/conf.d/default.conf
-    rm -rf /etc/nginx/conf.d/orc.conf
-elif [ "$NGINX_PHP_CONF" == "orc" ];then
-    rm -rf /etc/nginx/conf.d/default.conf
-    rm -rf /etc/nginx/conf.d/tp.conf
-else
-    rm -rf /etc/nginx/conf.d/orc.conf
-    rm -rf /etc/nginx/conf.d/tp.conf
-fi
 
 #日志权限处理
 chown -R nginx:nginx $APP_PATH
@@ -44,11 +45,12 @@ mkdir -p /data/log
 chown -R nginx:nginx /data/log
 chmod -R 777 /data/log
 
-#extra third shell start
-sh /extra/external.sh
+#create cli.log
+touch /cli.log
 
-#监控监本启动
-nohup php /extra/monitor/start &
+#extra third shell start
+bash /extra/external.sh
+
 #php-fpm start
 /usr/local/sbin/php-fpm &
 #nginx start
