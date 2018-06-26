@@ -86,6 +86,7 @@ RUN cp /etc/apk/repositories /etc/apk/repositories.bak && \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
+	    bash \
 		gcc \
 		libc-dev \
 		make \
