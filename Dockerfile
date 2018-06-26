@@ -274,6 +274,10 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     pkgconf \
     re2c
 
+#设置时区
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+  && echo 'Asia/Shanghai' >/etc/timezone
+
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 
