@@ -294,4 +294,4 @@ EXPOSE 80
 
 STOPSIGNAL SIGTERM
 
-CMD ["sh","/extra/start.sh"]
+CMD ["bash","/extra/start.sh"]
