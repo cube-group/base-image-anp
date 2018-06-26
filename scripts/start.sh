@@ -49,7 +49,7 @@ chmod -R 777 /data/log
 touch /cli.log
 
 #extra third shell start
-bash /extra/external.sh &
+bash /extra/external.sh >> /cli.log &
 
 #php-fpm start
 /usr/local/sbin/php-fpm &
