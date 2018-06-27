@@ -86,7 +86,6 @@ RUN cp /etc/apk/repositories /etc/apk/repositories.bak && \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
-	    bash \
 		gcc \
 		libc-dev \
 		make \
@@ -274,6 +273,11 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     pkgconf \
     re2c
 
+#设置时区
+RUN apk add bash \
+    && /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo 'Asia/Shanghai' >/etc/timezone
+
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/default.conf /etc/nginx/conf.d/default.conf
 
@@ -290,4 +294,4 @@ EXPOSE 80
 
 STOPSIGNAL SIGTERM
 
-CMD ["sh","/extra/start.sh"]
+CMD ["bash","/extra/start.sh"]
