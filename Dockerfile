@@ -11,7 +11,6 @@ ENV APP_PATH /var/www/html
 ENV APP_PATH_INDEX /var/www/html
 ENV APP_PATH_404 /var/www/html
 #ENV APP_MONITOR_HOOK DINGTALK-HOOK
-ENV APP_MONITOR_RATE 30
 
 ENV PHP_MEM_LIMIT 512M
 ENV PHP_POST_MAX_SIZE 100M
@@ -28,8 +27,8 @@ ENV NGINX_PHP_CONF default
 ENV php_conf /usr/local/etc/php-fpm.conf
 ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
 ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
-
 ENV NGINX_VERSION 1.13.12
+
 # 备份原始文件
 # 修改为国内镜像源
 RUN cp /etc/apk/repositories /etc/apk/repositories.bak && \

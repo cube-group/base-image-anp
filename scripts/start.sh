@@ -52,6 +52,8 @@ touch /cli.log
 bash /extra/external.sh
 
 #php-fpm start
-/usr/local/sbin/php-fpm &
+/usr/local/sbin/php-fpm >> /cli.log &
 #nginx start
-/usr/sbin/nginx -g "daemon off; error_log /dev/stderr info;"
+/usr/sbin/nginx >> /cli.log &
+
+tail -f /cli.log
