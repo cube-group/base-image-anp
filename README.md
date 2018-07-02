@@ -104,10 +104,6 @@ run the docker cmd
 ```
 $docker run -d -it -p 8089:80 --name project anp-project
 ```
-# Volume Conf Docker Run
-```
-$docker run -d -it -p 8089:80 -v /tmp/your-conf:/etc/nginx/sites-enabled/default.conf` --name project anp-project
-```
 
 # Test
 http://127.0.0.1:8089/index.php
