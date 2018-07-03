@@ -284,8 +284,8 @@ ADD conf/orc.conf /nginx-php-conf/orc.conf
 ADD conf/tp.conf /nginx-php-conf/tp.conf
 ADD conf/laravel.conf /nginx-php-conf/laravel.conf
 
-ADD scripts/ /extra
-ADD monitor/ /extra/monitor
+COPY ./scripts/ /extra/
+COPY ./monitor/ /extra/monitor/
 
 WORKDIR $APP_PATH
 

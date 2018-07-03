@@ -13,7 +13,7 @@ use Myaf\Utils\FileUtil;
 require __DIR__ . '/vendor/autoload.php';
 
 /**
- * 初始化
+ * 初始化脚本监控
  * Class InitMonitor
  */
 class InitMonitor
@@ -67,7 +67,7 @@ class InitMonitor
     {
         if ($this->ding) {
             $d = new LDing($this->ding);
-            $d->send("[{$this->appName}][{$this->serverIp()}] {$msg}");
+            $d->send("[INIT]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
         }
     }
 }

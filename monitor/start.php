@@ -2,12 +2,13 @@
 
 use Myaf\Net\LDing;
 
+require __DIR__ . '/vendor/autoload.php';
+
 /**
  * Created by PhpStorm.
  * User: linyang
  * Date: 2018/4/17
  * Time: 上午10:43
- *
  * Class Monitor
  * 监控项1: php-fpm slowlog
  * 监控项2: php-fpm进程数
@@ -95,9 +96,7 @@ class Monitor
     {
         if ($this->ding) {
             $d = new LDing($this->ding);
-            $d->send("[{$this->appName}][{$this->serverIp()}] {$msg}");
-        } else {
-            echo "can't find env APP_MONITOR_HOOK, can't send ding.\n";
+            $d->send("[MONITOR]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
         }
     }
 }
