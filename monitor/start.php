@@ -74,7 +74,7 @@ class Monitor
                 }
             }
 
-            $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
+            $fpmNum = (int)exec('ps axu | grep php-fpm | wc -l');
             if ($fpmNum > 0 && $fpmNum >= (int)($this->maxChildren * 0.9)) {
                 $this->sendDing("php-fpm children not enough: {$fpmNum}/{$this->maxChildren}");
             }

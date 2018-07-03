@@ -43,7 +43,7 @@ class InitMonitor
 
         //app init shell
         if (!$appInitShell = getenv('APP_INIT_SHELL')) {
-            exit("[ERROR] not env APP_INIT_SHELL");
+            exit("[INIT] not env APP_INIT_SHELL");
         }
         echo "[INIT] APP_INIT_SHELL: {$appInitShell}\n";
 
