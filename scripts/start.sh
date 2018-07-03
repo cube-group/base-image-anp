@@ -65,7 +65,7 @@ echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
 echo "clear_env = no" >> ${fpm_conf}
 
 # nginx.d/default.conf 特殊location代码替换
-sed -i "s;#static rewrite or try_files;${NGINX_LOCATION};g" ${nginxDefaultConf}
+sed -i "s@#static rewrite or try_files@${NGINX_LOCATION}@g" ${nginxDefaultConf}
 
 
 #日志权限处理
