@@ -110,6 +110,7 @@ http://127.0.0.1:8089/index.php
 
 ## 环境变量
 * NGINX_PHP_CONF: tp为thinkphp fastcgi配置、orc为orc fastcgi配置、laravel为laravel fastcgi配置,默认为yaf配置
+* NGINX_LOCATION: 特殊nginx location配置,如:rewrite、try_files或其它
 * PHP_MEM_LIMIT: php进程内存限制,默认512M
 * PHP_POST_MAX_SIZE: php post最大字节 默认100M
 * PHP_UPLOAD_MAX_FILESIZE: php最大文件上传限制 默认100M

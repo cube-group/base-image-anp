@@ -1,12 +1,14 @@
 #!/bin/bash
 
+nginxDefaultConf="/etc/nginx/conf.d/default.conf"
+
 #nginx php conf select
 if [ "$NGINX_PHP_CONF" == "tp" ];then
-    cat /nginx-php-conf/tp.conf > /etc/nginx/conf.d/default.conf
+    cat /nginx-php-conf/tp.conf > ${nginxDefaultConf}
 elif [ "$NGINX_PHP_CONF" == "orc" ];then
-    cat /nginx-php-conf/orc.conf > /etc/nginx/conf.d/default.conf
+    cat /nginx-php-conf/orc.conf > ${nginxDefaultConf}
 elif [ "$NGINX_PHP_CONF" == "laravel" ];then
-    cat /nginx-php-conf/laravel.conf > /etc/nginx/conf.d/default.conf
+    cat /nginx-php-conf/laravel.conf > ${nginxDefaultConf}
 else
     echo "yaf"
 fi
@@ -14,12 +16,12 @@ fi
 
 # Increase the nginx default.conf
 if [ ! -z "$APP_PATH_INDEX" ]; then
- sed -i "s#root /var/www/html;#root ${APP_PATH_INDEX};#g" /etc/nginx/conf.d/default.conf
+ sed -i "s#root /var/www/html;#root ${APP_PATH_INDEX};#g" ${nginxDefaultConf}
 fi
 
 # Increase the nginx default.conf
 if [ ! -z "$APP_PATH_404" ]; then
- sed -i "s#root /var/www/errors;#root ${APP_PATH_404};#g" /etc/nginx/conf.d/default.conf
+ sed -i "s#root /var/www/errors;#root ${APP_PATH_404};#g" ${nginxDefaultConf}
 fi
 
 # Increase the memory_limit
@@ -61,6 +63,9 @@ sed -i "s#;listen.group = www-data#listen.group = nginx#g" ${fpm_conf}
 touch ${FPM_SLOWLOG}
 echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
 echo "clear_env = no" >> ${fpm_conf}
+
+# nginx.d/default.conf 特殊location代码替换
+sed -i "s;#static rewrite or try_files;${NGINX_LOCATION};g" ${nginxDefaultConf}
 
 
 #日志权限处理
