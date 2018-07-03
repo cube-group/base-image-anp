@@ -67,7 +67,7 @@ class InitMonitor
     {
         if ($this->ding) {
             $d = new LDing($this->ding);
-            $d->send("[INIT]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
+            $d->send("[INIT-ANP]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
         }
     }
 }

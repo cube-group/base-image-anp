@@ -96,7 +96,7 @@ class Monitor
     {
         if ($this->ding) {
             $d = new LDing($this->ding);
-            $d->send("[MONITOR]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
+            $d->send("[MONITOR-ANP]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
         }
     }
 }
