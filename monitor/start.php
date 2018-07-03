@@ -36,7 +36,7 @@ class Monitor
      */
     private $slowlog = '';
     /**
-     * 监控频率
+     * 监控频率(单位:秒)
      * @var int
      */
     private $rate = 30;
@@ -76,7 +76,7 @@ class Monitor
 
             $fpmNum = (int)system('ps axu | grep php-fpm | wc -l');
             if ($fpmNum > 0 && $fpmNum >= (int)($this->maxChildren * 0.9)) {
-                $this->sendDing("php-fpm children will be not enough: {$fpmNum}");
+                $this->sendDing("php-fpm children not enough: {$fpmNum}/{$this->maxChildren}");
             }
 
             sleep($this->rate);
@@ -89,14 +89,14 @@ class Monitor
      */
     private function serverIp()
     {
-        return $_SERVER['REMOTE_ADDR'] . '-' . gethostbyname(exec('hostname'));
+        return gethostbyname(exec('hostname'));
     }
 
     private function sendDing($msg)
     {
         if ($this->ding) {
             $d = new LDing($this->ding);
-            $d->send("[MONITOR-ANP]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
+            $d->send("[MONITOR-ANP]\n[APP_NAME] {$this->appName}\n[NODE_IP] {$this->serverIp()}\n{$msg}\n");
         }
     }
 }

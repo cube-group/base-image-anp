@@ -51,7 +51,7 @@ class InitMonitor
         exec("{$appInitShell} >> /init-shell.out 2>> /init-shell.err");
         $out = system("cat /init-shell.out && true > /init-shell.out");
         $err = system("cat /init-shell.err && true > /init-shell.err");
-        $this->sendDing("[INIT-SHELL] {$appInitShell}\n{$out}\n{$err}\n");
+        $this->sendDing("[INIT-SHELL]\n{$appInitShell}\n{$out}\n{$err}");
     }
 
     /**
@@ -60,14 +60,14 @@ class InitMonitor
      */
     private function serverIp()
     {
-        return $_SERVER['REMOTE_ADDR'] . '-' . gethostbyname(exec('hostname'));
+        return gethostbyname(exec('hostname'));
     }
 
     private function sendDing($msg)
     {
         if ($this->ding) {
             $d = new LDing($this->ding);
-            $d->send("[INIT-ANP]\n[{$this->appName}]\n[{$this->serverIp()}]\n {$msg}");
+            $d->send("[INIT-ANP]\n[APP_NAME] {$this->appName}\n[NODE_IP] {$this->serverIp()}\n{$msg}\n");
         }
     }
 }
