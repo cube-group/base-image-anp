@@ -119,5 +119,5 @@ http://127.0.0.1:8089/index.php
 * APP_PATH: 项目所在目录(默认为:/var/www/html)
 * APP_PATH_INDEX: PHP项目index.php入口文件所在目录(默认为:/var/www/html)
 * APP_PATH_404: PHP项目404.html文件所在目录(默认为:/var/www/html)
-* APP_INIT_SHELL: 初始化执行脚本(整个Docker生命周期只执行一次)
+* APP_INIT_SHELL: 初始化执行脚本,如:php \$APP_PATH/init.sh
 * APP_MONITOR_HOOK: app报警钉钉群机器人webhook

@@ -19,11 +19,16 @@ require __DIR__ . '/vendor/autoload.php';
 class InitMonitor
 {
     private $appName = 'apc';
-    private $ding = 'https://oapi.dingtalk.com/robot/send?access_token=86a6a6c2f0fde8811412b39739bed47155e88982ac6ddc203ddc43e9cb920287';
+    private $ding = '';
 
+    /**
+     * InitMonitor constructor.
+     */
     public function __construct()
     {
         error_reporting('E_ALL & ~E_NOTICE');
+
+        echo "=========== InitMonitor ===========\n";
 
         if ($appName = getenv('APP_NAME')) {
             $this->appName = $appName;
@@ -36,16 +41,17 @@ class InitMonitor
         }
         echo "[INIT] ding: {$this->ding}\n";
 
+        //app init shell
         if (!$appInitShell = getenv('APP_INIT_SHELL')) {
-            echo "can't find env APP_INIT_SHELL\n";
-            exit();
+            exit("[ERROR] not env APP_INIT_SHELL");
         }
-        echo "APP_INIT_SHELL {$appInitShell}\n";
+        echo "[INIT] APP_INIT_SHELL: {$appInitShell}\n";
 
-        system("{$appInitShell} >> /cli-init-shell.log 2>&1");
-        if ($content = system("cat /cli-init-shell.log")) {
-            $this->sendDing("[INIT-SHELL] {$appInitShell}\n{$content}\n");
-        }
+        //exec
+        exec("{$appInitShell} >> /init-shell.out 2>> /init-shell.err");
+        $out = system("cat /init-shell.out && true > /init-shell.out");
+        $err = system("cat /init-shell.err && true > /init-shell.err");
+        $this->sendDing("[INIT-SHELL] {$appInitShell}\n{$out}\n{$err}\n");
     }
 
     /**
@@ -62,10 +68,8 @@ class InitMonitor
         if ($this->ding) {
             $d = new LDing($this->ding);
             $d->send("[{$this->appName}][{$this->serverIp()}] {$msg}");
-        } else {
-            echo "can't find env APP_MONITOR_HOOK, can't send ding.\n";
         }
     }
 }
 
-new CronTabMonitor();
+new InitMonitor();
