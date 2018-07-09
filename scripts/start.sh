@@ -16,11 +16,10 @@ if [ "$APP_NAME" ]; then
 fi
 #慢日志
 touch ${SLOW_LOG}
-echo "slowlog = ${SLOW_LOG}" >> ${fpm_conf}
-echo "php_admin_value[error_log] = ${ERROR_LOG}" >> ${fpm_conf}
-#错误日志
 touch ${ERROR_LOG}
 chmod 777 ${ERROR_LOG}
+echo "slowlog = ${SLOW_LOG}" >> ${fpm_conf}
+echo "php_admin_value[error_log] = ${ERROR_LOG}" >> ${fpm_conf}
 
 
 
