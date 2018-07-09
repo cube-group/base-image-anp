@@ -9,13 +9,15 @@ CONTAINER_ID=${HOSTNAME}
 
 #设置慢日志和错误日志文件
 SLOW_LOG=$FPM_SLOWLOG
-ERROR_LOG="/var/log/php-error.log"
+ERROR_LOG="/var/log/fpm-php.www.log"
 if [ "$APP_NAME" ]; then
     SLOW_LOG=/data/log/${APP_NAME}-${IP}-${CONTAINER_ID}.phpslow
+
     ERROR_LOG=/data/log/${APP_NAME}-${IP}-${CONTAINER_ID}.phperror
 fi
-#慢日志
+#创建慢日志
 touch ${SLOW_LOG}
+#创建错误日志
 touch ${ERROR_LOG}
 chmod 777 ${ERROR_LOG}
 echo "slowlog = ${SLOW_LOG}" >> ${fpm_conf}
