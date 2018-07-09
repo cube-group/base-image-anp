@@ -2,6 +2,30 @@
 
 nginxDefaultConf="/etc/nginx/conf.d/default.conf"
 
+#IP
+IP=`/sbin/ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+#容器ID
+CONTAINER_ID=${HOSTNAME}
+
+#设置慢日志和错误日志文件
+SLOW_LOG=$FPM_SLOWLOG
+ERROR_LOG=/var/log/php-error.log
+if [ "$APP_NAME" ]; then
+    SLOW_LOG=/data/log/${APP_NAME}-${IP}-${CONTAINER_ID}.phpslow
+    ERROR_LOG=/data/log/${APP_NAME}-${IP}-${CONTAINER_ID}.phperror
+fi
+#慢日志
+touch ${SLOW_LOG}
+echo "slowlog = ${SLOW_LOG}" >> ${fpm_conf}
+#错误日志
+touch ${ERROR_LOG}
+chmod 777 ${ERROR_LOG}
+echo "error_log = ${ERROR_LOG}" >> ${php_vars}
+
+
+
+
+
 #nginx php conf select
 if [ "$NGINX_PHP_CONF" == "tp" ];then
     echo "nginx-fastcgi-conf: thinkphp"
@@ -48,8 +72,6 @@ sed -i "s#group = www-data#group = nginx#g" ${fpm_conf}
 sed -i "s#;listen.mode = 0660#listen.mode = 0666#g" ${fpm_conf}
 sed -i "s#;listen.owner = www-data#listen.owner = nginx#g" ${fpm_conf}
 sed -i "s#;listen.group = www-data#listen.group = nginx#g" ${fpm_conf}
-touch ${FPM_SLOWLOG}
-echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf}
 echo "clear_env = no" >> ${fpm_conf}
 
 # nginx.d/default.conf 特殊location代码替换

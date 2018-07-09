@@ -68,11 +68,11 @@ class Monitor
     private function init()
     {
         while (true) {
-            if ($this->slowlog) {
+/*            if ($this->slowlog) {
                 if ($log = system("cat {$this->slowlog} && : > {$this->slowlog}")) {
                     $this->sendDing($log);
                 }
-            }
+            }*/
 
             $fpmNum = (int)exec('ps axu | grep php-fpm | wc -l');
             if ($fpmNum > 0 && $fpmNum >= (int)($this->maxChildren * 0.9)) {
