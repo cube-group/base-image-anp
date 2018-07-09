@@ -104,35 +104,21 @@ run the docker cmd
 ```
 $docker run -d -it -p 8089:80 --name project anp-project
 ```
-# Volume Conf Docker Run
-```
-$docker run -d -it -p 8089:80 -v /tmp/your-conf:/etc/nginx/sites-enabled/default.conf` --name project anp-project
-```
 
 # Test
 http://127.0.0.1:8089/index.php
 
-## 环境变量:NGINX参数
+## 环境变量
 * NGINX_PHP_CONF: tp为thinkphp fastcgi配置、orc为orc fastcgi配置、laravel为laravel fastcgi配置,默认为yaf配置
-
-## 环境变量:PHP参数相关
+* NGINX_LOCATION: 特殊nginx location配置,如:rewrite、try_files或其它
 * PHP_MEM_LIMIT: php进程内存限制,默认512M
 * PHP_POST_MAX_SIZE: php post最大字节 默认100M
 * PHP_UPLOAD_MAX_FILESIZE: php最大文件上传限制 默认100M
 * FPM_MAX_CHILDREN: php-fpm最大子进程数量
 * FPM_SLOWLOG_TIMEOUT: php-fpm慢日志超时时间(单位:秒)
-
-## 特殊环境变量
 * APP_NAME: app名称
 * APP_PATH: 项目所在目录(默认为:/var/www/html)
 * APP_PATH_INDEX: PHP项目index.php入口文件所在目录(默认为:/var/www/html)
 * APP_PATH_404: PHP项目404.html文件所在目录(默认为:/var/www/html)
+* APP_INIT_SHELL: 初始化执行脚本,如:php \$APP_PATH/init.sh
 * APP_MONITOR_HOOK: app报警钉钉群机器人webhook
-* APP_MONITOR_RATE: 监控频率(单位:秒)
-
-## 特殊入口脚本支持
-Dockerfile中追加<br>
-```Dockerfile
-RUN echo -e "your scripts" >> /extra/external.sh
-```
-注意:your scripts脚本一定都需要是在系统后台运行的比如nohup sh xxx &

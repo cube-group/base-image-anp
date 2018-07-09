@@ -11,7 +11,6 @@ ENV APP_PATH /var/www/html
 ENV APP_PATH_INDEX /var/www/html
 ENV APP_PATH_404 /var/www/html
 #ENV APP_MONITOR_HOOK DINGTALK-HOOK
-ENV APP_MONITOR_RATE 30
 
 ENV PHP_MEM_LIMIT 512M
 ENV PHP_POST_MAX_SIZE 100M
@@ -28,8 +27,8 @@ ENV NGINX_PHP_CONF default
 ENV php_conf /usr/local/etc/php-fpm.conf
 ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
 ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
-
 ENV NGINX_VERSION 1.13.12
+
 # 备份原始文件
 # 修改为国内镜像源
 RUN cp /etc/apk/repositories /etc/apk/repositories.bak && \
@@ -239,29 +238,7 @@ RUN apk add --no-cache \
     echo 'extension=apcu.so' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.enabled=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo 'apc.shm_size=32M' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
-    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
-
-
-RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
-    echo "upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}"  >> ${php_vars} &&\
-    echo "post_max_size = ${PHP_POST_MAX_SIZE}"  >> ${php_vars} &&\
-    echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
-    echo "memory_limit = ${PHP_MEM_LIMIT}"  >> ${php_vars} && \
-    sed -i "s#;catch_workers_output\s*=\s*yes#catch_workers_output = yes#g" ${fpm_conf} && \
-    sed -i "s#pm.max_children = 5#pm.max_children = ${FPM_MAX_CHILDREN}#g" ${fpm_conf} && \
-    sed -i "s#pm.start_servers = 2#pm.start_servers = 5#g" ${fpm_conf} && \
-    sed -i "s#pm.min_spare_servers = 1#pm.min_spare_servers = 4#g" ${fpm_conf} && \
-    sed -i "s#pm.max_spare_servers = 3#pm.max_spare_servers = 6#g" ${fpm_conf} && \
-    sed -i "s#;pm.max_requests = 500#pm.max_requests = 200#g" ${fpm_conf} && \
-    sed -i "s#;request_slowlog_timeout = 0#request_slowlog_timeout = ${FPM_SLOWLOG_TIMEOUT}#g" ${fpm_conf} && \
-    sed -i "s#user = www-data#user = nginx#g" ${fpm_conf} && \
-    sed -i "s#group = www-data#group = nginx#g" ${fpm_conf} && \
-    sed -i "s#;listen.mode = 0660#listen.mode = 0666#g" ${fpm_conf} && \
-    sed -i "s#;listen.owner = www-data#listen.owner = nginx#g" ${fpm_conf} && \
-    sed -i "s#;listen.group = www-data#listen.group = nginx#g" ${fpm_conf} && \
-    touch ${FPM_SLOWLOG} && \
-    echo "slowlog = ${FPM_SLOWLOG}" >> ${fpm_conf} && \
-    echo "clear_env = no" >> ${fpm_conf} && \
+    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     # remove useless
     apk del \
     dpkg-dev dpkg \
@@ -285,8 +262,8 @@ ADD conf/orc.conf /nginx-php-conf/orc.conf
 ADD conf/tp.conf /nginx-php-conf/tp.conf
 ADD conf/laravel.conf /nginx-php-conf/laravel.conf
 
-ADD scripts/ /extra
-ADD monitor/ /extra/monitor
+COPY ./scripts/ /extra/
+COPY ./monitor/ /extra/monitor/
 
 WORKDIR $APP_PATH
 

@@ -1,0 +1,28 @@
+{
+  "name": "cube-group/myaf-net",
+  "description": "net",
+  "keywords": [
+    "base"
+  ],
+  "authors": [
+    {
+      "name": "linyang",
+      "email": "linyangflash@163.com"
+    },
+    {
+      "name": "chenqionghe"
+    }
+  ],
+  "license": "MIT",
+  "type": "library",
+  "require": {
+    "cube-group/myaf-utils": "*",
+    "cube-group/myaf-log": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Myaf\\Net\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}

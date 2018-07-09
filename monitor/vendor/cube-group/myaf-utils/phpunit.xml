@@ -1,0 +1,15 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="service">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- 这里的变量可以通过$GLOBALS['DB_DSN']的方式取到-->
+    <php>
+        <var name="DB_DSN" value="mysql:dbname=myguestbook;host=localhost" />
+        <var name="DB_USER" value="user" />
+        <var name="DB_PASSWD" value="passwd" />
+        <var name="DB_DBNAME" value="myguestbook" />
+    </php>
+</phpunit>
