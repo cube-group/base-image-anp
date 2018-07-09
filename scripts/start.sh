@@ -17,11 +17,11 @@ fi
 #慢日志
 touch ${SLOW_LOG}
 echo "slowlog = ${SLOW_LOG}" >> ${fpm_conf}
+echo "php_admin_value[error_log] = ${ERROR_LOG}" >> ${fpm_conf}
 #错误日志
 touch ${ERROR_LOG}
 chmod 777 ${ERROR_LOG}
-echo "log_errors = On" >> ${php_vars}
-echo "error_log = ${ERROR_LOG}" >> ${php_vars}
+
 
 
 
