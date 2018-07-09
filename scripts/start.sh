@@ -16,6 +16,10 @@ if [ "$APP_NAME" ]; then
     ERROR_LOG=/data/log/${APP_NAME}-${IP}-${CONTAINER_ID}.phperror
 fi
 #创建慢日志
+
+mkdir -p /data/log
+chmod 777 /data/log
+
 touch ${SLOW_LOG}
 echo ${SLOW_LOG}
 #创建错误日志
