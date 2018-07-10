@@ -15,14 +15,14 @@ if [ "$APP_NAME" ]; then
 
     ERROR_LOG=/data/log/${APP_NAME}-${IP}-${CONTAINER_ID}.phperror
 fi
-#创建慢日志
 
-mkdir -p /data/log
-chmod 777 /data/log
-
+#慢日志与错误日志
+if [ ! -d "/data/log" ];then
+    mkdir -p /data/log
+    chmod 777 /data/log
+fi
 touch ${SLOW_LOG}
 echo ${SLOW_LOG}
-#创建错误日志
 touch ${ERROR_LOG}
 echo ${ERROR_LOG}
 chmod 777 ${ERROR_LOG}
