@@ -27,8 +27,10 @@ touch ${ERROR_LOG}
 echo ${ERROR_LOG}
 chmod 777 ${ERROR_LOG}
 echo "slowlog = ${SLOW_LOG}" >> ${fpm_conf}
-echo "log_errors = On " >> ${php_vars}
-echo "error_log = ${ERROR_LOG}" >> ${php_vars}
+echo "php_admin_flag[log_errors] = on" >> ${fpm_conf}
+echo "php_admin_value[error_log] = ${ERROR_LOG}" >> ${fpm_conf}
+#echo "log_errors = On " >> ${php_vars}
+#echo "error_log = ${ERROR_LOG}" >> ${php_vars}
 
 
 
