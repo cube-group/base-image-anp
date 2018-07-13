@@ -202,7 +202,7 @@ RUN apk add --no-cache \
     --with-freetype-dir=/usr/include/ \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-install iconv pdo_mysql pdo_pgsql gd exif intl xsl soap zip opcache && \
+    docker-php-ext-install iconv pdo_mysql pdo_pgsql gd exif intl xsl soap zip opcache bcmath && \
     docker-php-source delete && \
     apk add libmemcached-libs libmemcached-dev zlib-dev \
     && pecl install igbinary \
