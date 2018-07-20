@@ -31,8 +31,8 @@ ENV NGINX_VERSION 1.13.12
 
 # 备份原始文件
 # 修改为国内镜像源
-RUN cp /etc/apk/repositories /etc/apk/repositories.bak && \
-    echo "http://mirrors.aliyun.com/alpine/v3.7/main/" > /etc/apk/repositories && \
+RUN echo "http://mirrors.aliyun.com/alpine/v3.7/main/" > /etc/apk/repositories && \
+    echo "http://mirrors.aliyun.com/alpine/v3.7/community/" >> /etc/apk/repositories && \
     apk update && \
     #install nginx
     GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
