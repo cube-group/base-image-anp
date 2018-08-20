@@ -29,12 +29,7 @@ class Monitor
      * 监控的最大FPM进程数
      * @var int
      */
-    private $maxChildren = 100;
-    /**
-     * 慢日志路径
-     * @var string
-     */
-    private $slowlog = '';
+    private $maxChildren = 200;
     /**
      * 监控频率(单位:秒)
      * @var int
@@ -46,21 +41,16 @@ class Monitor
      */
     public function __construct()
     {
+        echo __CLASS__ . "\n";
+
         if ($appName = getenv('APP_NAME')) {
             $this->appName = $appName;
         }
         if ($ding = getenv('APP_MONITOR_HOOK')) {
             $this->ding = $ding;
         }
-        if ($slowlog = getenv('FPM_SLOWLOG')) {
-            $this->slowlog = $slowlog;
-        }
-
         if ($maxChildren = (int)getenv('FPM_MAX_CHILDREN')) {
             $this->maxChildren = $maxChildren;
-        }
-        if ($slowlogTimeout = (int)getenv('FPM_SLOWLOG_TIMEOUT')) {
-            $this->slowlogTimeout = $slowlogTimeout;
         }
         $this->init();
     }
@@ -68,14 +58,8 @@ class Monitor
     private function init()
     {
         while (true) {
-/*            if ($this->slowlog) {
-                if ($log = system("cat {$this->slowlog} && : > {$this->slowlog}")) {
-                    $this->sendDing($log);
-                }
-            }*/
-
             $fpmNum = (int)exec('ps axu | grep php-fpm | wc -l');
-            if ($fpmNum > 0 && $fpmNum >= (int)($this->maxChildren * 0.9)) {
+            if ($fpmNum > 0 && $fpmNum >= (int)($this->maxChildren * 0.7)) {
                 $this->sendDing("php-fpm children not enough: {$fpmNum}/{$this->maxChildren}");
             }
 

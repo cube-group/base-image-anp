@@ -7,8 +7,6 @@
  */
 
 use Myaf\Net\LDing;
-use Myaf\Utils\Arrays;
-use Myaf\Utils\FileUtil;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -18,7 +16,7 @@ require __DIR__ . '/vendor/autoload.php';
  */
 class InitMonitor
 {
-    private $appName = 'apc';
+    private $appName = 'anp';
     private $ding = '';
 
     /**
@@ -28,7 +26,7 @@ class InitMonitor
     {
         error_reporting('E_ALL & ~E_NOTICE');
 
-        echo "=========== InitMonitor ===========\n";
+        echo __CLASS__ . "\n";
 
         if ($appName = getenv('APP_NAME')) {
             $this->appName = $appName;
