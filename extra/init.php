@@ -26,8 +26,6 @@ class InitMonitor
     {
         error_reporting('E_ALL & ~E_NOTICE');
 
-        echo __CLASS__ . "\n";
-
         if ($appName = getenv('APP_NAME')) {
             $this->appName = $appName;
         }

@@ -41,8 +41,6 @@ class Monitor
      */
     public function __construct()
     {
-        echo __CLASS__ . "\n";
-
         if ($appName = getenv('APP_NAME')) {
             $this->appName = $appName;
         }
